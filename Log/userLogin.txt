@@ -1,0 +1,1 @@
+select * from users where phone='18500140212' and pwd = '0566c33af35cb6a48955fd1bcafb7439'

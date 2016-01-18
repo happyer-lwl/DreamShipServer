@@ -2,7 +2,7 @@
 
     // http://121.42.38.84/imageUpload.php/?userPhone=18500140212&imageName=18500140212.png&imageData=23423525a324234214342342412342134
     require_once ('./Db.php');
-    require_once ('./Config.php');
+    require_once ('./config.php');
     
     static $data = array(
         'result' => '0',

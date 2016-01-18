@@ -155,21 +155,24 @@ class Dreams{
         
         $sql = "INSERT INTO user_dreams (text, pic_url, time, type, user_id) values('$dream_text', '$image_name', '$dream_time', $dream_type, $user_id);";
         $result = self::$_db_data->query($sql);
-        
-//        file_put_contents("dreams.txt", $sql);
+                
+        file_put_contents("/Log/dreams.txt", $sql);
         
         if(!$result) {
             $data['result'] = 201;
-            $data['msg'] = 'Data Not Exist！';
-            return json_encode($data);
+            $data['msg'] = 'Compose Failed!';
+        }else {
+            $sql = "update dream_points set total_point = total_point + 1, dream_point = dream_point + 1 where user_id = $user_id";
+            $result = self::$_db_data->query($sql, self::$_connect_data);
+            if ($result){
+                $data['result'] = 200;
+                $data['msg'] = 'Dream Composed,Successful!';
+            }else{
+                $data['result'] = 201;
+                $data['msg'] = 'Compose Failed!';
+            }
         }
-        else {
-
-            $data['result'] = 200;
-            $data['msg'] = 'Dream Composed,Successful!';
-            $data['data'] = "";
-            return json_encode($data);
-        }
+        return json_encode($data);
     } 
     
     // 获取梦想鸡汤

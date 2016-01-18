@@ -1,0 +1,1 @@
+select * from user_dreams as ud left join users as u on ud.user_id = u.id left join dream_types as dt on dt.type_id = ud.type left join dream_collections as dc on dc.user_id = 2 and ud.id = dc.dream_id where ud.user_id = 2 order by ud.id desc

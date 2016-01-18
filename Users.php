@@ -69,7 +69,7 @@ class Users{
         $result = self::$_db_login->query($sql, self::$_connect_login);
         $countRight = self::$_db_login->num_rows($result);
 
-        $file = fopen("userLogin.txt", "w") or die("Unable to open file!");
+        $file = fopen("./Log/userLogin.txt", "w") or die("Unable to open file!");
         fwrite($file, $sql);
 
         $sqlName = "select * from users where phone='$user_pnone'";
@@ -127,13 +127,25 @@ class Users{
         }
 
         $sql = "insert into users (name, pwd, mail, image, phone) values ('$user_name', '$user_pwd', '$user_mail', '$user_image', '$user_phone')";
-
-//        $file = fopen("log.txt", "w") or die("Unable to open file!");
-//        fwrite($file, $sql);
+        $file = fopen("./Log/userReg.txt", "w") or die("Unable to open file!");
+        fwrite($file, $sql);
+        $result = self::$_db_login->query($sql, self::$_connect_login);
+        if ($result){
+            $user_id = self::$_db_login->value_for_id("users", "id", "phone", $user_phone);
         
-        self::$_db_login->query($sql, self::$_connect_login);
-        $data['result'] = 200;
-        $data['msg'] = '用户创建成功！';
+            $sql = "insert into dream_points (user_id, total_points, dream_point, comment_point) values ('$user_id', 0, 0, 0)";
+            $result = self::$_db_login->query($sql, self::$_connect_login);
+            if ($result){
+                $data['result'] = 200;
+                $data['msg'] = '用户创建成功！';
+            }else{
+                $data['result'] = 201;
+                $data['msg'] = '用户创建失败！';
+            }
+        }else{
+            $data['result'] = 201;
+            $data['msg'] = '用户创建失败！';
+        }
         return json_encode($data);
     }
 
@@ -175,7 +187,7 @@ class Users{
 
         $sqlName = "update users set $mod_key='$mod_value' where phone='$user_pnone'";
 
-        $file = fopen("\Log\modUser.txt", "w");
+        $file = fopen("./Log/modUser.txt", "w");
         fwrite($file, $sqlName);
 
         self::$_db_login->query($sqlName);
@@ -279,7 +291,7 @@ class Users{
         }else{
             $sql = "INSERT INTO user_relation (user_id, focused_user_id) VALUES ($user_id, $focused_user_id)";
         
-            //file_put_contents("users_focus.txt", $sql);
+            file_put_contents("\Log\usersCreateFocus.txt", $sql);
 
             $result = self::$_db_login->query($sql, self::$_connect_login);
             if ($result){

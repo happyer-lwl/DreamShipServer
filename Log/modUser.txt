@@ -1,0 +1,1 @@
+update users set pwd='8bae12d4dbad4ba54f48a74ac5e4dbd2' where phone='18500140212'
